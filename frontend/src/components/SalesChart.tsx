@@ -12,6 +12,7 @@ interface ChartData {
 const TotalSalesChart: React.FC = () => {
     const [data, setData] = useState<[number, number][]>([]);
     const [interval, setInterval] = useState<string>('daily'); // Default interval
+    const [subtitleText, setSubtitleText] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +35,14 @@ const TotalSalesChart: React.FC = () => {
         fetchData();
     }, [interval]);
 
+    useEffect(() => {
+        if (typeof document !== 'undefined') {
+            setSubtitleText(document.ontouchstart === undefined
+                ? 'Click and drag in the plot area to zoom in'
+                : 'Pinch the chart to zoom in');
+        }
+    }, []);
+
     // Format date as "Jan '22"
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -55,9 +64,7 @@ const TotalSalesChart: React.FC = () => {
             style: { color: '#ffffff' },
         },
         subtitle: {
-            text: document.ontouchstart === undefined ?
-                'Click and drag in the plot area to zoom in' :
-                'Pinch the chart to zoom in',
+            text: subtitleText, // Use state for subtitle
             align: 'left',
             style: { color: '#ffffff' },
         },
