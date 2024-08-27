@@ -3,7 +3,8 @@ import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const response = await axios.get('http://localhost:5000/new-customers');
+    const URL = 'https://rq-analytics-aoyv.onrender.com';
+    const response = await axios.get(URL + '/new-customers');
     const data = response.data;
     res.status(200).json(data);
   } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Highcharts from 'highcharts';
+import Highcharts, { SeriesAreaOptions } from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import axios from 'axios';
 
@@ -19,7 +19,7 @@ const NewCustomersChart: React.FC = () => {
                 const result: ChartData[] = response.data;
 
                 // Process the data to fit Highcharts format
-                const chartData = result.map(item => [
+                const chartData: [number, number][] = result.map(item => [
                     new Date(item.date).getTime(), // Convert date to timestamp
                     item.cumulativeTotal // Cumulative total
                 ]);
@@ -33,41 +33,53 @@ const NewCustomersChart: React.FC = () => {
         fetchData();
     }, []);
 
+    // Format date as "Jan '22"
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        const options: Intl.DateTimeFormatOptions = { year: '2-digit', month: 'short' };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    };
+
     const options: Highcharts.Options = {
         chart: {
-            zoomType: 'x',
+            zooming: {
+                type: 'x',
+            },
             type: 'area',
-            backgroundColor: 'transparent', // No background color
+            backgroundColor: 'transparent',
         },
         title: {
             text: 'Cumulative New Customers Over Time',
             align: 'left',
-            style: { color: '#ffffff' }, // White text
+            style: { color: '#ffffff' },
         },
         subtitle: {
             text: document.ontouchstart === undefined ?
                 'Click and drag in the plot area to zoom in' :
                 'Pinch the chart to zoom in',
             align: 'left',
-            style: { color: '#ffffff' }, // White text
+            style: { color: '#ffffff' },
         },
         xAxis: {
             type: 'datetime',
             title: {
                 text: 'Date',
-                style: { color: '#ffffff' }, // White text
+                style: { color: '#ffffff' },
             },
             labels: {
-                style: { color: '#ffffff' }, // White text
+                style: { color: '#ffffff' },
+                formatter: function () {
+                    return formatDate(new Date(this.value as number).toISOString());
+                }
             }
         },
         yAxis: {
             title: {
                 text: 'Cumulative Total',
-                style: { color: '#ffffff' }, // White text
+                style: { color: '#ffffff' },
             },
             labels: {
-                style: { color: '#ffffff' }, // White text
+                style: { color: '#ffffff' },
             }
         },
         legend: {
@@ -100,9 +112,10 @@ const NewCustomersChart: React.FC = () => {
             }
         },
         series: [{
+            type: 'area',
             name: 'Cumulative New Customers',
             data: data
-        }]
+        } as SeriesAreaOptions]
     };
 
     return (

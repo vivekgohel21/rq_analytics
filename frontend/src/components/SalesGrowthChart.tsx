@@ -90,6 +90,7 @@ const MonthlyGrowthChart: React.FC = () => {
             }
         },
         series: [{
+            type: 'column',
             name: 'Growth Rate (%)',
             data: data.map(item => item.growthRate ?? 0),
         }]
