@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const API = 'https://rq-analytics-aoyv.onrender.com';
   try {
-    const URL = 'https://rq-analytics-aoyv.onrender.com';
-      const response = await axios.get(URL + '/geographical-distribution');
+      const response = await axios.get(API + '/geographical-distribution');
       const data = response.data;
       res.status(200).json(data);
   } catch (error) {

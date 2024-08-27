@@ -2,10 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const API = 'https://rq-analytics-aoyv.onrender.com';
     try {
         // Fetch the data from your backend
-        const URL = 'https://rq-analytics-aoyv.onrender.com';
-        const response = await axios.get(URL + '/sales-growth');
+        const response = await axios.get(API + '/sales-growth');
         const data = response.data;
 
         // Transform data if necessary
