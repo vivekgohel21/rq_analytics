@@ -3,22 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
-import { LatLng, LatLngBounds } from 'leaflet';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+// Dynamically import the components that require `window`
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
+
 import 'leaflet/dist/leaflet.css';  // Import Leaflet CSS for map styling
 
-// Import geocodes from your local file or adjust the path accordingly
 import geocodes from '../data/city_geocodes.json'; // Adjust the path as necessary
 
 interface CityData {
     _id: string;
     count: number;
-}
-
-interface Geocode {
-    _id: string;
-    lat: number;
-    lon: number;
 }
 
 const GeographicalChart: React.FC = () => {
